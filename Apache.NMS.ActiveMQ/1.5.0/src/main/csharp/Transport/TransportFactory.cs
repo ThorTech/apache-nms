@@ -18,6 +18,7 @@
 using System;
 using System.Reflection;
 using System.Collections.Generic;
+using System.Collections.Concurrent;
 using Apache.NMS.ActiveMQ.Util;
 using Apache.NMS.ActiveMQ.Transport.Discovery;
 using Apache.NMS.ActiveMQ.Transport.Failover;
@@ -33,7 +34,7 @@ namespace Apache.NMS.ActiveMQ.Transport
         private static readonly FactoryFinder<ActiveMQTransportFactoryAttribute, ITransportFactory> FACTORY_FINDER =
             new FactoryFinder<ActiveMQTransportFactoryAttribute, ITransportFactory>();
 
-        private static IDictionary<String, Type> TRANSPORT_FACTORY_TYPES = new Dictionary<String, Type>();
+        private static ConcurrentDictionary<String, Type> TRANSPORT_FACTORY_TYPES = new ConcurrentDictionary<String, Type>();
 
 		public static void HandleException(Exception ex)
 		{
@@ -139,7 +140,7 @@ namespace Apache.NMS.ActiveMQ.Transport
             try
             {
                 Type factoryType = FACTORY_FINDER.FindFactoryType(scheme);
-                TRANSPORT_FACTORY_TYPES[scheme] = factoryType;
+                TRANSPORT_FACTORY_TYPES.TryAdd(scheme, factoryType);
                 return factoryType;
             }
             catch
