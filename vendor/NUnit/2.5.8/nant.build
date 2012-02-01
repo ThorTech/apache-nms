@@ -1,0 +1,55 @@
+<?xml version="1.0" ?>
+<!--
+	Licensed to the Apache Software Foundation (ASF) under one or more
+	contributor license agreements.  See the NOTICE file distributed with
+	this work for additional information regarding copyright ownership.
+	The ASF licenses this file to You under the Apache License, Version 2.0
+	(the "License"); you may not use this file except in compliance with
+	the License.  You may obtain a copy of the License at
+
+	http://www.apache.org/licenses/LICENSE-2.0
+
+	Unless required by applicable law or agreed to in writing, software
+	distributed under the License is distributed on an "AS IS" BASIS,
+	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+	See the License for the specific language governing permissions and
+	limitations under the License.
+-->
+<project name="NUnit" default="default" xmlns="http://nant.sourceforge.net/release/0.85/nant.xsd">
+
+	<!-- ============================================================================================ -->
+	<!--      I N I T I A L I Z A T I O N                                                             -->
+	<!-- ============================================================================================ -->
+	<property name="basedir" value="${project::get-base-directory()}"/>
+	<property name="project.name" value="NUnit"/>
+	<property name="project.group" value="org.nunit"/>
+	<property name="project.version"  value="2.5.8" unless="${property::exists('project.version')}"/>
+	<property name="project.release.type" value="GA" unless="${property::exists('project.release.type')}" />
+	<property name="project.short_description" value="NUnit Unit Test Assemblies"/>
+	<property name="project.description" value="NUnit Unit Test Assemblies"/>
+	<property name="compile.skip" value="true"/>
+	<property name="build.framework.strings" value="net-2.0,net-3.5,net-4.0,mono-2.0,netcf-2.0" />
+
+	<!-- Repository organized as: organization/module/version/plaform/artifact, platform might be something like 'all' or 'net-2.0/release' -->
+	<target name="vendor-init" description="Initializes Vendor library from local repository.">
+		<!--
+		     Vendor specific info.  The prefix of 'vendor.apache.org' is taken from the property
+		     vendor.fileset.names'.  This comma-delimited list is iterated, and properties with
+		     well-known suffixes are used to access and copy down vendor file dependencies.
+		-->
+		<property name="vendor.fileset.names" value="" />
+	</target>
+
+	<target name="dependency-init" description="Initializes build dependencies">
+		<fileset id="install.filenames">
+			<include name="${basedir}/${current.build.framework}/nunit.framework.dll"/>
+		</fileset>
+
+	</target>
+
+	<target name="default" depends="install-all" />
+
+	<!-- Load the common target definitions  -->
+	<include buildfile="${basedir}/nant-common.xml"/>
+
+</project>
